@@ -1,2 +1,2 @@
 # othello-game
-othello game
+uncomplete othello game
