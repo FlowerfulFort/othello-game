@@ -1,0 +1,2 @@
+# othello-game
+othello game
