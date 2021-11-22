@@ -1,0 +1,15 @@
+# ignore home directory cc files.
+*.cc
+!src/*.cc
+
+# ignore testing files.
+*.test
+
+# ignore testing folders.
+test/
+
+# ignore object files.
+obj/
+
+# ignore main binary.
+main
