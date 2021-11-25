@@ -28,6 +28,6 @@ graphictest.test: graphictest.cc $(OBJ)/graphics.o
 	$(CXX) $(LIBs) $(INC) -o $@ $^
 
 resize.test: resizeterm.cc
-	$(CXX) $(LIBs) -o resize resizeterm.cc
+	$(CXX) $(LIBs) $(INC) -o $@ $^
 
 .PHONY: all clean test resize graphictest
