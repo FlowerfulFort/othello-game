@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <ncurses.h>
 #include <unistd.h>
-#include "GameManager.h"
+#include "GameManager.hpp"
 
 int main(void) {
     GameManager* gm = GameManager::GetManager();

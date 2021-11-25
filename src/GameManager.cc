@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <clocale>
 #include <csignal>
-#include "GameManager.h"
+#include "GameManager.hpp"
 
 GameManager* GameManager::instance_ = nullptr;
 GameManager* GameManager::GetManager() {
