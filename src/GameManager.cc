@@ -7,6 +7,8 @@
 
 constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
+constexpr int exitMsgSizeY = 7;
+constexpr int exitMsgSizeX = 40;
 constexpr int color_term = 1;
 constexpr int color_board = 7;
 GameManager* GameManager::instance_ = nullptr;
@@ -35,7 +37,8 @@ void GameManager::WindowInitialize() {
     noecho();
     curs_set(false);
     start_color();
-    getmaxyx(stdscr, termY_, termX_);
+    resetTerm();
+    // getmaxyx(stdscr, termY_, termX_); -> resetTerm();
 
     init_pair(color_term, COLOR_WHITE, COLOR_BLACK);
     /* draw Message into center of screen. */
@@ -45,29 +48,29 @@ void GameManager::WindowInitialize() {
         boardMsgSizeY, boardMsgSizeX, msgStartY, msgStartX);
     box(boardMsg, 0, 0);
     
-    mvwprintw(boardMsg, 2, 12, "Set the board size.");
+    mvwprintw(boardMsg, 2, 9, "Select the board size");
     init_pair(color_board, COLOR_BLACK, COLOR_WHITE);
     int type = 6;
     bool flag = true;
     keypad(boardMsg, true);
     while (flag) {
-        mvwprintw(boardMsg, 4, 5, "6x6     8x8     10x10     12x12");
+        mvwprintw(boardMsg, 4, 2, "  6x6      8x8     10x10     12x12 ");
         wattrset(boardMsg, COLOR_PAIR(color_board));
         switch (type) {
             case 6:
-            mvwprintw(boardMsg, 4, 5, "6x6");
+            mvwprintw(boardMsg, 4, 2, "  6x6  ");
             break;
 
             case 8:
-            mvwprintw(boardMsg, 4, 13, "8x8");
+            mvwprintw(boardMsg, 4, 11, "  8x8  ");
             break;
 
             case 10:
-            mvwprintw(boardMsg, 4, 21, "10x10");
+            mvwprintw(boardMsg, 4, 20, " 10x10 ");
             break;
 
             case 12:
-            mvwprintw(boardMsg, 4, 31, "12x12");
+            mvwprintw(boardMsg, 4, 30, " 12x12 ");
             break;
         }   // endswitch
         wrefresh(boardMsg);
@@ -96,6 +99,55 @@ void GameManager::WindowInitialize() {
     touchwin(stdscr);
     refresh();
 }
+void GameManager::resetTerm() {
+    getmaxyx(stdscr, termY_, termX_);
+}
+void GameManager::askExit() {
+    int msgStartY = (termY_ - exitMsgSizeY) / 2;
+    int msgStartX = (termX_ - exitMsgSizeX) / 2;
+    int type = 0;
+    WINDOW* msg = newwin(exitMsgSizeY, exitMsgSizeX,
+        msgStartY, msgStartX);
+    box(msg, 0, 0);
+    mvwprintw(msg, 2, 5, "Are you sure want to exit game?");
+    keypad(msg, true);
+    bool flag = true;
+    while (flag) {
+        mvwprintw(msg, 4, 8, "   OK   ");
+        mvwprintw(msg, 4, 23, " Cancel ");
+        wattrset(msg, COLOR_PAIR(color_board));
+        switch (type) {
+            case 0:
+            mvwprintw(msg, 4, 23, " Cancel ");
+            break;
+
+            case 1:
+            mvwprintw(msg, 4, 8, "   OK   ");
+            break;
+        }
+        wattroff(msg, COLOR_PAIR(color_board));
+        int input = wgetch(msg);
+        switch (input) {
+            case KEY_LEFT:
+            type = type ? 0 : 1;
+            break;
+
+            case KEY_RIGHT:
+            type = !type ? 1 : 0;
+            break;
+
+            case '\n':
+            flag = false;
+            break;
+        }
+    }
+    if (type) {
+        ExitGame();
+    }
+    delwin(msg);
+    touchwin(stdscr);
+    refresh();
+}
 void GameManager::ExitGame() {
     if (board_) {
         for (int i=0;i<boardsize_;i++) {
@@ -105,4 +157,5 @@ void GameManager::ExitGame() {
     }
     board_ = nullptr;
     endwin();
+    exit(0);
 }

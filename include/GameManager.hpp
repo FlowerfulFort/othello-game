@@ -20,10 +20,13 @@ class GameManager {
     
     void setBoardSize(int size);
     int boardsize() const;
+
+    void askExit();
     /* Free Memory, end ncurses. */
     void ExitGame();
  private:
     GameManager();  // private constructor.
+    void resetTerm();
     static GameManager* instance_;
     int** board_;   // othello game board.
     int boardsize_;
