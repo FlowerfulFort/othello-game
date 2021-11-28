@@ -24,8 +24,9 @@ GameManager::GameManager() {
 
 /* signal handler for SIGINT */
 void sigint_handle(int sig) {
-    endwin();
-    std::exit(0);
+    GameManager* ins = GameManager::GetManager();
+    // ins->ExitGame(1);
+    ins->askExit();
 }
 
 void GameManager::GameInitialize() const {
@@ -148,7 +149,7 @@ void GameManager::askExit() {
     touchwin(stdscr);
     refresh();
 }
-void GameManager::ExitGame() {
+void GameManager::ExitGame(int mode /*default=0*/) {
     if (board_) {
         for (int i=0;i<boardsize_;i++) {
             delete[] board_[i];
@@ -157,5 +158,11 @@ void GameManager::ExitGame() {
     }
     board_ = nullptr;
     endwin();
-    exit(0);
+    /* default value */
+    if(mode == 0) {
+        exit(0);
+    }
+    /* whem mode != 0,
+       the program will not be ended. 
+       it exists for game restart. */
 }

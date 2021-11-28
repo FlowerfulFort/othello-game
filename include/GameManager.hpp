@@ -23,7 +23,7 @@ class GameManager {
 
     void askExit();
     /* Free Memory, end ncurses. */
-    void ExitGame();
+    void ExitGame(int mode=0);
  private:
     GameManager();  // private constructor.
     void resetTerm();
