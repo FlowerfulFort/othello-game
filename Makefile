@@ -9,8 +9,10 @@ test: test.test
 graphictest: graphictest.test
 resize: resize.test
 
+cleanobj:
+	rm obj/*.o
 clean: 
-	rm main test resize
+	rm main *.test
 
 $(OBJ)/GameManager.o: $(SRC)/GameManager.cc
 	$(CXX) $(LIBs) $(INC) -c $(SRC)/GameManager.cc -o $(OBJ)/GameManager.o
@@ -30,4 +32,4 @@ graphictest.test: graphictest.cc $(OBJ)/graphics.o
 resize.test: resizeterm.cc
 	$(CXX) $(LIBs) $(INC) -o $@ $^
 
-.PHONY: all clean test resize graphictest
+.PHONY: all clean cleanobj test resize graphictest
