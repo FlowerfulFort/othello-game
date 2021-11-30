@@ -167,10 +167,13 @@ void GameManager::ExitGame(int mode /*default=0*/) {
        it exists for game restart. */
 }
 void GameManager::drawUI() {
+    /* Hard coding, will be edited */
+    int boardY = 1;
+    int boardX = 1;
     clear();
     if (boardsize_ < 4) {
         std::cerr << "boardsize error" << std::endl;
     }
-    gboard_ = new Board(boardsize_);
+    gboard_ = new Board(boardsize_, boardY, boardX);
     refresh();
 }

@@ -2,7 +2,8 @@
 #include <algorithm>
 #include "Board.hpp"
 
-Board::Board(int boardsize) : boardsize_(boardsize) {
+Board::Board(int boardsize, int y, int x): 
+    boardsize_(boardsize), starty_(y), startx_(x) {
     //mvprintw(1,1,"boardsize: %d", boardsize_);
     gameboard_ = new int*[boardsize_];
     wboard_ = new WINDOW**[boardsize_];
@@ -12,7 +13,7 @@ Board::Board(int boardsize) : boardsize_(boardsize) {
         wboard_[i] = new WINDOW*[boardsize_];
 
         for(int j=0;j<boardsize_;j++) {
-            wboard_[i][j] = subwin(stdscr, 4, 7, i*3+1, j*6+1);
+            wboard_[i][j] = subwin(stdscr, 4, 7, i*3+starty_, j*6+startx_);
             wborder(wboard_[i][j], '|', '|', '-', '-', '+', '+', '+', '+');
             //box(plate[i][j], 0, 0);
         }

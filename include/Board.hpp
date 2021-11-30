@@ -5,7 +5,7 @@
 class GameManager;
 class Board {
  public:
-    explicit Board(int boardsize);
+    explicit Board(int boardsize, int y, int x);
     ~Board();
  private:
     WINDOW*** wboard_;
