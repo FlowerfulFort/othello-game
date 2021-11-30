@@ -14,6 +14,13 @@
 #define __GAMEMANAGER_HPP__
 #include "Player.hpp"
 #include "Board.hpp"
+
+constexpr int color_board = 1;
+constexpr int color_p1 = 2;     // black.
+constexpr int color_p2 = 3;     // white.
+constexpr int color_pointer = 4;
+constexpr int color_alert = 7;
+
 class Board;
 class GameManager {
  public:
@@ -26,6 +33,9 @@ class GameManager {
     /* before "Game" start, this function must be called. */
     /* It sets UI for players. */
     void WindowInitialize();
+
+    /* Initialize Color Pairs */
+    void InitializeColorSet() const;
 
     void registerPlayer(Player* p1, Player* p2);
     /* draw Player UserInterface. */

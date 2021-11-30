@@ -11,8 +11,13 @@ constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
 constexpr int exitMsgSizeY = 7;
 constexpr int exitMsgSizeX = 40;
-constexpr int color_term = 1;
-constexpr int color_board = 7;
+/*
+constexpr int color_board = 1;
+constexpr int color_p1 = 2;     // black.
+constexpr int color_p2 = 3;     // white.
+constexpr int color_pointer = 4;
+constexpr int color_alert = 7;
+*/
 GameManager* GameManager::instance_ = nullptr;
 GameManager* GameManager::GetManager() {
     if (!instance_) {
@@ -37,15 +42,22 @@ void GameManager::GameInitialize() const {
     std::setlocale(LC_ALL, "");     // for UNICODE output.
     std::signal(SIGINT, sigint_handle);
 }
+void GameManager::InitializeColorSet() const {
+    init_pair(color_board, COLOR_BLACK, COLOR_GREEN);
+    init_pair(color_p1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(color_p2, COLOR_WHITE, COLOR_WHITE);
+    init_pair(color_pointer, COLOR_YELLOW, COLOR_YELLOW);
+    init_pair(color_alert, COLOR_BLACK, COLOR_WHITE);
+}
 void GameManager::WindowInitialize() {
     initscr();
     noecho();
     curs_set(false);
     start_color();
+    InitializeColorSet();
     resetTerm();
     // getmaxyx(stdscr, termY_, termX_); -> resetTerm();
 
-    init_pair(color_term, COLOR_WHITE, COLOR_BLACK);
     /* draw Message into center of screen. */
     int msgStartY = (termY_ - boardMsgSizeY) / 2;
     int msgStartX = (termX_ - boardMsgSizeX) / 2;
@@ -54,13 +66,13 @@ void GameManager::WindowInitialize() {
     box(boardMsg, 0, 0);
     
     mvwprintw(boardMsg, 2, 9, "Select the board size");
-    init_pair(color_board, COLOR_BLACK, COLOR_WHITE);
+    init_pair(color_alert, COLOR_BLACK, COLOR_WHITE);
     int type = 6;
     bool flag = true;
     keypad(boardMsg, true);
     while (flag) {
         mvwprintw(boardMsg, 4, 2, "  6x6      8x8     10x10     12x12 ");
-        wattrset(boardMsg, COLOR_PAIR(color_board));
+        wattrset(boardMsg, COLOR_PAIR(color_alert));
         switch (type) {
             case 6:
             mvwprintw(boardMsg, 4, 2, "  6x6  ");
@@ -79,7 +91,7 @@ void GameManager::WindowInitialize() {
             break;
         }   // endswitch
         wrefresh(boardMsg);
-        wattroff(boardMsg, COLOR_PAIR(color_board));
+        wattroff(boardMsg, COLOR_PAIR(color_alert));
         int arrow = wgetch(boardMsg);
         switch (arrow) {
             case KEY_LEFT:
@@ -120,7 +132,7 @@ void GameManager::askExit() {
     while (flag) {
         mvwprintw(msg, 4, 8, "   OK   ");
         mvwprintw(msg, 4, 23, " Cancel ");
-        wattrset(msg, COLOR_PAIR(color_board));
+        wattrset(msg, COLOR_PAIR(color_alert));
         switch (type) {
             case 0:
             mvwprintw(msg, 4, 23, " Cancel ");
@@ -130,7 +142,7 @@ void GameManager::askExit() {
             mvwprintw(msg, 4, 8, "   OK   ");
             break;
         }
-        wattroff(msg, COLOR_PAIR(color_board));
+        wattroff(msg, COLOR_PAIR(color_alert));
         int input = wgetch(msg);
         switch (input) {
             case KEY_LEFT:
@@ -176,4 +188,5 @@ void GameManager::drawUI() {
     }
     gboard_ = new Board(boardsize_, boardY, boardX);
     refresh();
+    gboard_->UpdateBoard();
 }
