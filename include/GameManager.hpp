@@ -12,8 +12,10 @@
 */
 #ifndef __GAMEMANAGER_HPP__
 #define __GAMEMANAGER_HPP__
+#include <vector>
 #include "Player.hpp"
 #include "Board.hpp"
+#include "Pane.hpp"
 
 constexpr int color_board = 1;
 constexpr int color_p1 = 2;     // black.
@@ -60,7 +62,9 @@ class GameManager {
     Player* p2_;
     void resetTerm();
     static GameManager* instance_;
-    Board* gboard_;
+    /* for updating windows. */
+    std::vector<Pane*>* windows;
+    // Board* gboard_;
     int boardsize_;
     int termX_;     // terminal X size.
     int termY_;     // terminal Y size.

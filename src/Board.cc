@@ -6,7 +6,7 @@
 #include "Board.hpp"
 static const char* piece = "   ";
 Board::Board(int boardsize, int y, int x): 
-    boardsize_(boardsize), starty_(y), startx_(x) {
+    boardsize_(boardsize), Pane(y, x) {
     //mvprintw(1,1,"boardsize: %d", boardsize_);
     gameboard_ = new int*[boardsize_];
     wboard_ = new WINDOW**[boardsize_];
@@ -41,7 +41,7 @@ void Board::nowPointing(const int& y, const int& x) {
     pointx_ = x;
     pointy_ = y;
 }
-void Board::UpdateBoard() const {
+void Board::UpdateWindow() const {
     for (int i=0;i<boardsize_;i++) {
         for (int j=0;j<boardsize_;j++) {
             WINDOW* pos = wboard_[i][j];

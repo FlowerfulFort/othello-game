@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <iostream>
+#include <vector>
 #include <cstdlib>
 #include <clocale>
 #include <csignal>
@@ -28,7 +29,7 @@ GameManager* GameManager::GetManager() {
 GameManager::GameManager() {
     p1_ = nullptr;
     p2_ = nullptr;
-    gboard_ = nullptr;
+    windows = nullptr;
 }
 
 /* signal handler for SIGINT */
@@ -110,6 +111,8 @@ void GameManager::WindowInitialize() {
     }   // endwhile
     boardsize_ = type;
     delwin(boardMsg);
+
+    windows = new std::vector<Pane*>;
     /* testing start*/
     //mvprintw(1,1, "boardsize is %d", boardsize_);
     /* testing end*/
@@ -169,9 +172,11 @@ void GameManager::askExit() {
 }
 void GameManager::ExitGame(int mode /*default=0*/) {
     /* must be filled Player delete */
-    delete gboard_;
-    gboard_ = nullptr;
+    for (auto w : *windows) {
+        delete w;
+    }
     endwin();
+    delete windows;
     /* default value */
     if(mode == 0) {
         exit(0);
@@ -188,13 +193,14 @@ void GameManager::drawUI() {
     if (boardsize_ < 4) {
         std::cerr << "boardsize error" << std::endl;
     }
-    gboard_ = new Board(boardsize_, boardY, boardX);
-    refresh();
-    gboard_->UpdateBoard();
+    windows->push_back(new Board(boardsize_, boardY, boardX));
+    RefreshWindow();
 }
 void GameManager::RefreshWindow() const {
     if (!is_init) return;
-    gboard_->UpdateBoard();
+    for (auto w : *windows) {
+        w->UpdateWindow();
+    }
     touchwin(stdscr);
     refresh();
 }
