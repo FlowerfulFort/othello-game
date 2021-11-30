@@ -115,6 +115,7 @@ void GameManager::WindowInitialize() {
     /* testing end*/
     touchwin(stdscr);
     refresh();
+    is_init = true;
 }
 void GameManager::resetTerm() {
     getmaxyx(stdscr, termY_, termX_);
@@ -164,6 +165,7 @@ void GameManager::askExit() {
     delwin(msg);
     touchwin(stdscr);
     refresh();
+    is_init = false;
 }
 void GameManager::ExitGame(int mode /*default=0*/) {
     /* must be filled Player delete */
@@ -189,4 +191,10 @@ void GameManager::drawUI() {
     gboard_ = new Board(boardsize_, boardY, boardX);
     refresh();
     gboard_->UpdateBoard();
+}
+void GameManager::RefreshWindow() const {
+    if (!is_init) return;
+    gboard_->UpdateBoard();
+    touchwin(stdscr);
+    refresh();
 }

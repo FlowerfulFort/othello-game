@@ -37,6 +37,9 @@ class GameManager {
     /* Initialize Color Pairs */
     void InitializeColorSet() const;
 
+    /* Execute All of Defined Refresh Function. */
+    void RefreshWindow() const;
+
     void registerPlayer(Player* p1, Player* p2);
     /* draw Player UserInterface. */
     void drawUI();
@@ -52,6 +55,7 @@ class GameManager {
     void ExitGame(int mode=0);
  private:
     GameManager();  // private constructor.
+    bool is_init;
     Player* p1_;
     Player* p2_;
     void resetTerm();

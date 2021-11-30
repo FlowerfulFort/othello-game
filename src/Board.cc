@@ -1,6 +1,7 @@
 #include <ncurses.h>
+#include <iostream>
+#include <cstdlib>
 #include <algorithm>
-#include <utility>
 #include "GameManager.hpp"
 #include "Board.hpp"
 static const char* piece = "   ";
@@ -29,6 +30,10 @@ Board::Board(int boardsize, int y, int x):
     gameboard_[boardsize_/2][boardsize_/2] = 2;
     gameboard_[boardsize_/2][boardsize_/2-1] = 3;
     gameboard_[boardsize_/2-1][boardsize_/2] = 3;
+    /* !!!!!TESTING START!!!!! */
+    pointx_ = 2;
+    pointy_ = 3;
+    /* !!!!!TESTING END!!!!! */
     touchwin(stdscr);
 }
 int** Board::returnBoard() const { return gameboard_; }
@@ -47,6 +52,17 @@ void Board::UpdateBoard() const {
             wattroff(pos, COLOR_PAIR(n));
         }
     }
+    if(pointy_ < 0 || pointx_ < 0 || pointy_ >= boardsize_ || pointx_ >= boardsize_) {
+        endwin();
+        std::cerr << "pointx/y_ error occured" << std::endl;
+        exit(0);
+    }
+        
+    WINDOW* pos = wboard_[pointy_][pointx_];
+    wattron(pos, COLOR_PAIR(color_pointer));
+    mvwprintw(pos, 1, 2, piece);
+    mvwprintw(pos, 2, 2, piece);
+    wattroff(pos, COLOR_PAIR(color_pointer));
     touchwin(stdscr);
     refresh();
 }

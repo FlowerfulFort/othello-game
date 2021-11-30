@@ -1,7 +1,6 @@
 #ifndef __BOARD_HPP__
 #define __BOARD_HPP__
 #include <ncurses.h>
-#include <utility>
 #include "GameManager.hpp"
 class GameManager;
 class Board {
