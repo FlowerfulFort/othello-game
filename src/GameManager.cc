@@ -62,7 +62,7 @@ void GameManager::WindowInitialize() {
     /* draw Message into center of screen. */
     int msgStartY = (termY_ - boardMsgSizeY) / 2;
     int msgStartX = (termX_ - boardMsgSizeX) / 2;
-    WINDOW* boardMsg = newwin(
+    WINDOW* boardMsg = subwin(stdscr,
         boardMsgSizeY, boardMsgSizeX, msgStartY, msgStartX);
     box(boardMsg, 0, 0);
     
@@ -111,6 +111,8 @@ void GameManager::WindowInitialize() {
     }   // endwhile
     boardsize_ = type;
     delwin(boardMsg);
+    clear();
+    refresh();
 
     windows = new std::vector<Pane*>;
     /* testing start*/
@@ -171,16 +173,16 @@ void GameManager::askExit() {
     is_init = false;
 }
 void GameManager::ExitGame(int mode /*default=0*/) {
+    if(mode == 0) {
+        endwin();
+        exit(0);
+    }
     /* must be filled Player delete */
     for (auto w : *windows) {
         delete w;
     }
     endwin();
     delete windows;
-    /* default value */
-    if(mode == 0) {
-        exit(0);
-    }
     /* whem mode != 0,
        the program will not be ended. 
        it exists for game restart. */

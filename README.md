@@ -8,7 +8,7 @@ uncomplete othello game
 
 ## 알려진 오류
 :heavy_check_mark:: 해결됨
-1. 보드사이즈를 선택하기전 SIGINT가 전달되고 Cancel을 누를때 보드사이즈 선택 메세지가 안뜨는 현상.
+1. 보드사이즈를 선택하기전 SIGINT가 전달되고 Cancel을 누를때 보드사이즈 선택 메세지가 안뜨는 현상. :heavy_check_mark:
 
     -> 메세지를 stdscr의 subwin으로 바꾸면 해결이 가능할듯.
 
