@@ -14,7 +14,6 @@
 #define __GAMEMANAGER_HPP__
 #include <vector>
 #include "Player.hpp"
-#include "Board.hpp"
 #include "Pane.hpp"
 
 constexpr int color_board = 1;

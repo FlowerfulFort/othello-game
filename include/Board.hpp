@@ -9,7 +9,11 @@ class Board : public Pane{
     explicit Board(int boardsize, int y, int x);
     int** returnBoard() const;
     void nowPointing(const int& y, const int& x);
+#ifdef PRETESTING
+    void UpdateWindow();
+#else
     void UpdateWindow() const;
+#endif
     ~Board();
  private:
     /* calculate drawing pos. */

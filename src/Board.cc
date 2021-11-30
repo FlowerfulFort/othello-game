@@ -41,7 +41,11 @@ void Board::nowPointing(const int& y, const int& x) {
     pointx_ = x;
     pointy_ = y;
 }
+#ifdef PRETESTING
+void Board::UpdateWindow() {
+#else
 void Board::UpdateWindow() const {
+#endif
     for (int i=0;i<boardsize_;i++) {
         for (int j=0;j<boardsize_;j++) {
             WINDOW* pos = wboard_[i][j];

@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "GameManager.hpp"
 #include "Board.hpp"
+#include "PlayerPane.hpp"
 
 constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
@@ -45,9 +46,9 @@ void GameManager::GameInitialize() const {
 }
 void GameManager::InitializeColorSet() const {
     init_pair(color_board, COLOR_BLACK, COLOR_GREEN);
-    init_pair(color_p1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(color_p2, COLOR_WHITE, COLOR_WHITE);
-    init_pair(color_pointer, COLOR_YELLOW, COLOR_YELLOW);
+    init_pair(color_p1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(color_p2, COLOR_BLACK, COLOR_WHITE);
+    init_pair(color_pointer, COLOR_BLACK, COLOR_YELLOW);
     init_pair(color_alert, COLOR_BLACK, COLOR_WHITE);
 }
 void GameManager::WindowInitialize() {
@@ -189,13 +190,30 @@ void GameManager::ExitGame(int mode /*default=0*/) {
 }
 void GameManager::drawUI() {
     /* Hard coding, will be edited */
-    int boardY = 1;
-    int boardX = 1;
+    int p1Y = 0;
+    int p1X = 0;
+    int p2Y = p1Y + height_;
+    int p2X = 0;
+    int boardY = 0;
+    int boardX = width_;
     clear();
     if (boardsize_ < 4) {
         std::cerr << "boardsize error" << std::endl;
     }
     windows->push_back(new Board(boardsize_, boardY, boardX));
+    /* !!!!!TESTING CODE START!!!!!*/
+    PlayerPane* pp = new PlayerPane(p1Y, p1X);
+    pp->turn_ = true;
+    pp->playercode_ = 1;    // black;
+    pp->score_ = 104;
+    windows->push_back(pp);
+    
+    pp = new PlayerPane(p2Y, p2X);
+    pp->turn_ = false;
+    pp->playercode_ = 2;
+    pp->score_ = 51;
+    windows->push_back(pp);
+    /* !!!!!TESTING CODE ENDED!!!!!*/
     RefreshWindow();
 }
 void GameManager::RefreshWindow() const {

@@ -18,12 +18,14 @@
 #define __PLAYER_HPP__
 #include <ncurses.h>
 #include <string>
+/* Player의 free 작업은 PlayerPane이 전담할 것. */
 class Player{
  public:
     Player(WINDOW* ui, std::string name, int playercode, int color);
     void refreshUI() const;
     void turnSet(bool turn);
     void setScore(int score);
+    void getScore() const;
  private:
     WINDOW* ui_;
     bool ismyturn_;
