@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include "GameManager.hpp"
 
-int main(void) {
+int main(int argc, char** argv) {
     GameManager* gm = GameManager::GetManager();
     gm->GameInitialize();
     gm->WindowInitialize();
