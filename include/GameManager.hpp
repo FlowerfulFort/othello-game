@@ -13,6 +13,8 @@
 #ifndef __GAMEMANAGER_HPP__
 #define __GAMEMANAGER_HPP__
 #include "Player.hpp"
+#include "Board.hpp"
+class Board;
 class GameManager {
  public:
     /* this class is Singleton Class. */
@@ -27,7 +29,7 @@ class GameManager {
 
     void registerPlayer(Player* p1, Player* p2);
     /* draw Player UserInterface. */
-    void drawPlayerUI();
+    void drawUI();
 
     /* draw Memubar. */
     void drawMemubar() const;
@@ -44,7 +46,7 @@ class GameManager {
     Player* p2_;
     void resetTerm();
     static GameManager* instance_;
-    int** board_;   // othello game board.
+    Board* gboard_;
     int boardsize_;
     int termX_;     // terminal X size.
     int termY_;     // terminal Y size.

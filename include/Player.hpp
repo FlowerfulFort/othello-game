@@ -32,3 +32,4 @@ class Player{
     int playercode_;
     std::string name_;
 };
+#endif  // headerguard

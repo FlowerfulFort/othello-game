@@ -3,6 +3,7 @@ LIBs=-lncursesw
 INC=-I./include
 SRC=./src
 OBJ=./obj
+OBJs=$(OBJ)/GameManager.o $(OBJ)/graphics.o $(OBJ)/Board.o
 
 all: main
 test: test.test
@@ -20,7 +21,10 @@ $(OBJ)/GameManager.o: $(SRC)/GameManager.cc
 $(OBJ)/graphics.o: $(SRC)/graphics.cc
 	$(CXX) $(LIBs) $(INC) -c $(SRC)/graphics.cc -o $(OBJ)/graphics.o
 
-main: $(SRC)/main.cc $(OBJ)/GameManager.o
+$(OBJ)/Board.o: $(SRC)/Board.cc
+	$(CXX) $(LIBs) $(INC) -c $(SRC)/Board.cc -o $(OBJ)/Board.o
+
+main: $(SRC)/main.cc $(OBJs)
 	$(CXX) $(LIBs) $(INC) -o $@ $^
 
 test.test: test.cc

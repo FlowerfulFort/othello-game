@@ -1,9 +1,11 @@
 #include <ncurses.h>
+#include <iostream>
 #include <cstdlib>
 #include <clocale>
 #include <csignal>
 #include <unistd.h>
 #include "GameManager.hpp"
+#include "Board.hpp"
 
 constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
@@ -19,7 +21,9 @@ GameManager* GameManager::GetManager() {
     return instance_;
 }
 GameManager::GameManager() {
-    board_ = nullptr;
+    p1_ = nullptr;
+    p2_ = nullptr;
+    gboard_ = nullptr;
 }
 
 /* signal handler for SIGINT */
@@ -95,7 +99,7 @@ void GameManager::WindowInitialize() {
     boardsize_ = type;
     delwin(boardMsg);
     /* testing start*/
-    mvprintw(1,1, "boardsize is %d", boardsize_);
+    //mvprintw(1,1, "boardsize is %d", boardsize_);
     /* testing end*/
     touchwin(stdscr);
     refresh();
@@ -150,13 +154,9 @@ void GameManager::askExit() {
     refresh();
 }
 void GameManager::ExitGame(int mode /*default=0*/) {
-    if (board_) {
-        for (int i=0;i<boardsize_;i++) {
-            delete[] board_[i];
-        }
-        delete[] board_;
-    }
-    board_ = nullptr;
+    /* must be filled Player delete */
+    delete gboard_;
+    gboard_ = nullptr;
     endwin();
     /* default value */
     if(mode == 0) {
@@ -165,4 +165,12 @@ void GameManager::ExitGame(int mode /*default=0*/) {
     /* whem mode != 0,
        the program will not be ended. 
        it exists for game restart. */
+}
+void GameManager::drawUI() {
+    clear();
+    if (boardsize_ < 4) {
+        std::cerr << "boardsize error" << std::endl;
+    }
+    gboard_ = new Board(boardsize_);
+    refresh();
 }
