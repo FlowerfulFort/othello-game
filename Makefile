@@ -28,7 +28,7 @@ $(OBJ)/PlayerPane.o: $(SRC)/PlayerPane.cc
 	$(CXX) $(LIBs) $(INC) -DPRETESTING -c $(SRC)/PlayerPane.cc -o $(OBJ)/PlayerPane.o
 
 main: $(SRC)/main.cc $(OBJs)
-	$(CXX) $(LIBs) $(INC) -o $@ $^
+	$(CXX) $(LIBs) $(INC) -DPRETESTING -o $@ $^
 
 test.test: test.cc
 	$(CXX) $(LIBs) -o $@ $^
