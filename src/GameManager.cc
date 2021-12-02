@@ -206,13 +206,15 @@ void GameManager::drawUI() {
     }
     windows->push_back(new Board(boardsize_, boardY, boardX));
     /* !!!!!TESTING CODE START!!!!!*/
-    PlayerPane* pp = new PlayerPane(new __testplayer(1), p1Y, p1X);
-    pp->player_->score_ = 34;
+    p1_ = new __testplayer(2);
+    PlayerPane* pp = new PlayerPane(p1_, p1Y, p1X);
+    pp->player_->score_ = 2;
     pp->player_->turn_ = true;
     windows->push_back(pp);
     
-    pp = new PlayerPane(new __testplayer(2), p2Y, p2X);
-    pp->player_->score_ = 78;
+    p2_ = new __testplayer(3);
+    pp = new PlayerPane(p2_, p2Y, p2X);
+    pp->player_->score_ = 2;
     pp->player_->turn_ = false;
     windows->push_back(pp);
 
@@ -227,7 +229,58 @@ void GameManager::RefreshWindow() const {
     touchwin(stdscr);
     refresh();
 }
+/* 나중에 bool형을 반환하여 게임을 재시작할 것인지
+   표시할 수도 있을듯. */
+void GameManager::GameProcess() {
+    /* 게임 보드. */
+    Board* bd = dynamic_cast<Board*>((*windows)[0]);
+    if (bd == nullptr) {
+        endwin();
+        std::cerr << "Board Point Error!" << std::endl;
+        exit(1);
+    }
+    int** gameboard = bd->returnBoard();
+    bd->nowPointing(0, 0);
+#ifndef PRETESTING
+    Player* now = p1_;
+#else
+    __testplayer* now = p1_;
+#endif
+    /* 지금은 무한루프지만, GameManager가 
+       보드판 조건을 판별해야 함. */
+    keypad(stdscr, true);
+    while (true) {
+        int key = getch();
+        switch (key) {
+            case KEY_UP:
+            bd->pointUp();
+            break;
 
-void GameProcess() {
-    
+            case KEY_DOWN:
+            bd->pointDown();
+            break;
+
+            case KEY_LEFT:
+            bd->pointLeft();
+            break;
+
+            case KEY_RIGHT:
+            bd->pointRight();
+            break;
+
+            case '\n': {
+                auto [ dy, dx ] = bd->getPointing();
+                gameboard[dy][dx] = now->playercode_;
+                p1_->turn_ = !(p1_->turn_);
+                p2_->turn_ = !(p2_->turn_);
+                now = (p1_->turn_) ? p1_ : p2_;
+                break;
+            }
+
+            default:
+            continue;
+            break;
+        }
+        RefreshWindow();
+    }
 }

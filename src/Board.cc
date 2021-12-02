@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
+#include <utility>
 #include "GameManager.hpp"
 #include "Board.hpp"
 static const char* piece = "   ";
@@ -69,6 +70,25 @@ void Board::UpdateWindow() const {
     wattroff(pos, COLOR_PAIR(color_pointer));
     touchwin(stdscr);
     refresh();
+}
+void Board::pointUp() {
+    if (pointy_ <= 0) return;
+    pointy_--;
+}
+void Board::pointDown() {
+    if (pointy_ >= boardsize_-1) return;
+    pointy_++;
+}
+void Board::pointLeft() {
+    if (pointx_ <= 0) return;
+    pointx_--;
+}
+void Board::pointRight() {
+    if (pointx_ >= boardsize_-1) return;
+    pointx_++;
+}
+std::pair<int, int> Board::getPointing() const {
+    return std::make_pair(pointy_, pointx_);
 }
 Board::~Board() {
     for (int i=0;i<boardsize_;i++) {

@@ -1,6 +1,7 @@
 #ifndef __BOARD_HPP__
 #define __BOARD_HPP__
 #include <ncurses.h>
+#include <utility>
 #include "GameManager.hpp"
 #include "Pane.hpp"
 class GameManager;
@@ -9,6 +10,11 @@ class Board : public Pane{
     explicit Board(int boardsize, int y, int x);
     int** returnBoard() const;
     void nowPointing(const int& y, const int& x);
+    std::pair<int, int> getPointing() const;
+    void pointUp();
+    void pointDown();
+    void pointLeft();
+    void pointRight();
 #ifdef PRETESTING
     void UpdateWindow();
 #else
