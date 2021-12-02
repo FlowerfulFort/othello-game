@@ -9,11 +9,15 @@
 #include "Board.hpp"
 #include "PlayerPane.hpp"
 
+#ifdef PRETESTING
+#include "testplayer.hpp"
+#endif
+
 constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
 constexpr int exitMsgSizeY = 7;
 constexpr int exitMsgSizeX = 40;
-/*
+/* moved into GameManager.hpp
 constexpr int color_board = 1;
 constexpr int color_p1 = 2;     // black.
 constexpr int color_p2 = 3;     // white.
@@ -202,17 +206,16 @@ void GameManager::drawUI() {
     }
     windows->push_back(new Board(boardsize_, boardY, boardX));
     /* !!!!!TESTING CODE START!!!!!*/
-    PlayerPane* pp = new PlayerPane(p1Y, p1X);
-    pp->turn_ = true;
-    pp->playercode_ = 1;    // black;
-    pp->score_ = 104;
+    PlayerPane* pp = new PlayerPane(new __testplayer(1), p1Y, p1X);
+    pp->player_->score_ = 34;
+    pp->player_->turn_ = true;
     windows->push_back(pp);
     
-    pp = new PlayerPane(p2Y, p2X);
-    pp->turn_ = false;
-    pp->playercode_ = 2;
-    pp->score_ = 51;
+    pp = new PlayerPane(new __testplayer(2), p2Y, p2X);
+    pp->player_->score_ = 78;
+    pp->player_->turn_ = false;
     windows->push_back(pp);
+
     /* !!!!!TESTING CODE ENDED!!!!!*/
     RefreshWindow();
 }
@@ -223,4 +226,8 @@ void GameManager::RefreshWindow() const {
     }
     touchwin(stdscr);
     refresh();
+}
+
+void GameProcess() {
+    
 }

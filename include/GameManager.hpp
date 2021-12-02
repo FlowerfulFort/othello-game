@@ -15,7 +15,9 @@
 #include <vector>
 #include "Player.hpp"
 #include "Pane.hpp"
-
+#ifdef PRETESTING
+#include "testplayer.hpp"
+#endif
 constexpr int color_board = 1;
 constexpr int color_p1 = 2;     // black.
 constexpr int color_p2 = 3;     // white.
@@ -44,10 +46,9 @@ class GameManager {
     void registerPlayer(Player* p1, Player* p2);
     /* draw Player UserInterface. */
     void drawUI();
-
-    /* draw Memubar. */
-    void drawMemubar() const;
     
+    /* Game Process */
+    void GameProcess();
     void setBoardSize(int size);
     int boardsize() const;
 
@@ -57,8 +58,13 @@ class GameManager {
  private:
     GameManager();  // private constructor.
     bool is_init;
+#ifndef PRETESTING
     Player* p1_;
     Player* p2_;
+#else
+    __testplayer* p1_;
+    __testplayer* p2_;
+#endif
     void resetTerm();
     static GameManager* instance_;
     /* for updating windows. */

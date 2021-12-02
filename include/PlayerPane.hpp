@@ -3,29 +3,30 @@
 #include <ncurses.h>
 #include "Pane.hpp"
 #include "Player.hpp"
+
+#ifdef PRETESTING
+#include "testplayer.hpp"
+#endif
+
 constexpr int height_ = 12;
 constexpr int width_ = 27;
 class PlayerPane : public Pane {
  public:
 #ifdef PRETESTING
-    explicit PlayerPane(int y, int x);
+    explicit PlayerPane(__testplayer* p, int y, int x);
+    void UpdateWindow();
+    __testplayer* player_;
 #else
     explicit PlayerPane(Player* p, int y, int x);
-#endif
-#ifdef PRETESTING
-    void UpdateWindow();
-#else
     void UpdateWindow() const;
-#endif
+#endif  // PRETESTING
+    /* 미구현됨. */
     ~PlayerPane();
 
-#ifdef PRETESTING
-    bool turn_;
-    int playercode_;
-    int score_;
-#endif  // end #ifdef PRETESTING
  private:
     WINDOW* win_;
+#ifndef PRETESTING
     Player* player_;
+#endif  // if not defined PRETESTING
 };
 #endif  // headerguard.
