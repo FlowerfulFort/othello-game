@@ -15,7 +15,7 @@ PlayerPane::PlayerPane(__testplayer* p, int y, int x):
     player_ = p;
 #else
 PlayerPane::PlayerPane(Player* p, int y, int x):
-    player_(p), Pane(y, x) {
+    player_(p), Pane(y, x), isWinner_(false) {
 #endif
     win_ = subwin(stdscr, height_, width_, starty_, startx_);
     box(win_, 0, 0);
@@ -48,6 +48,9 @@ void PlayerPane::UpdateWindow() const {
         mvwprintw(win_, 2, 7, playerformat, player_->getCode()-1);
         wattroff(win_, COLOR_PAIR(color_pointer));
     }
+    if (isWinner_) {
+        mvwprintw(win_, 1, 6, "! W I N N E R !");
+    }
 #endif
 #ifdef PRETESTING
     wdrawDigit(win_, 4, 2, player_->score_);
@@ -56,7 +59,9 @@ void PlayerPane::UpdateWindow() const {
 #endif
     wrefresh(win_);
 }
-
+void PlayerPane::setWin() {
+    isWinner_ = true;
+}
 PlayerPane::~PlayerPane() {
     delwin(win_);
 #ifndef PRETESTING

@@ -17,6 +17,8 @@ constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
 constexpr int exitMsgSizeY = 7;
 constexpr int exitMsgSizeX = 40;
+constexpr int winnerMsgSizeY = 36;
+constexpr int winnerMsgSizeX = 7;
 /* moved into GameManager.hpp
 constexpr int color_board = 1;
 constexpr int color_p1 = 2;     // black.
@@ -308,6 +310,14 @@ void GameManager::GameProcess() {
         }
         RefreshWindow();
     }
+    int msgStartY = (termY_ - winnerMsgSizeY) / 2;
+    int msgStartX = (termX_ - winnerMsgSizeX) / 2;
+    if (p1_->getScore() > p2_->getScore()) {
+        dynamic_cast<PlayerPane*>((*windows)[1])->setWin();
+    } else if (p2_->getScore() > p1_->getScore()) {
+        dynamic_cast<PlayerPane*>((*windows)[2])->setWin();
+    }
+    RefreshWindow();
 }
 /*
 #ifndef PRETESTING

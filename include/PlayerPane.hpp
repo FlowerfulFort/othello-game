@@ -19,6 +19,7 @@ class PlayerPane : public Pane {
 #else
     explicit PlayerPane(Player* p, int y, int x);
     void UpdateWindow() const;
+    void setWin();
 #endif  // PRETESTING
     /* 미구현됨. */
     ~PlayerPane();
@@ -28,5 +29,6 @@ class PlayerPane : public Pane {
 #ifndef PRETESTING
     Player* player_;
 #endif  // if not defined PRETESTING
+    bool isWinner_;
 };
 #endif  // headerguard.

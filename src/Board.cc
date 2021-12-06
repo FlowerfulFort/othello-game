@@ -110,6 +110,7 @@ void Board::pointRight() {
 Pos Board::getPointing() const {
     return std::make_pair(pointy_, pointx_);
 }
+/* 정우건님 개선코드 */
 /* 최적화를 할수있는 여지가 있다면,
    뒤집을 수 있는 경우의 수를
    비트로 나타내어 8방향=1byte로 표현한다. 
@@ -144,7 +145,7 @@ void Board::Reverse(int code, const Pos& start, const Pos& dest, const Pos& diff
     }
 }
 void Board::UpdateRevMap(int code) {
-    aval_[code] = false;
+    aval_[code-codeoffset] = false;
     for (int i=0;i<boardsize_;i++) {
         for (int j=0;j<boardsize_;j++) {
             bool flag = false;
