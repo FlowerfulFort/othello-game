@@ -284,17 +284,19 @@ void GameManager::GameProcess() {
         RefreshWindow();
     }
 }
+#ifndef PRETESTING
 void GameManager::registerPlayer(Player* p1, Player* p2) {
     p1_ = p1; p2_ = p2;
 }
+#endif
 /* 정우건님 개선코드 */
-bool GameManager:isGameEnded(int** b_) {
+bool GameManager::isGameEnded(int** b_) {
 	bool isTrue = true;
 	int countarr[4];
-    fill_n(countarr, 4, 0);
+    std::fill_n(countarr, 4, 0);
 
-	for (int i = 0; i < size_; i++) {
-		for (int j = 0; j < size_; j++) {
+	for (int i = 0; i < boardsize_; i++) {
+		for (int j = 0; j < boardsize_; j++) {
 			countarr[b_[i][j]]++;
 		}
 	}
