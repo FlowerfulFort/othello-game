@@ -25,6 +25,7 @@ constexpr int color_pointer = 4;
 constexpr int color_alert = 7;
 
 class Board;
+class Player;
 class GameManager {
  public:
     /* this class is Singleton Class. */

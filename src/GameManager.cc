@@ -8,7 +8,7 @@
 #include "GameManager.hpp"
 #include "Board.hpp"
 #include "PlayerPane.hpp"
-
+#include "Player.hpp"
 #ifdef PRETESTING
 #include "testplayer.hpp"
 #endif
@@ -120,9 +120,11 @@ void GameManager::WindowInitialize() {
     refresh();
 
     windows = new std::vector<Pane*>;
-    /* testing start*/
-    //mvprintw(1,1, "boardsize is %d", boardsize_);
-    /* testing end*/
+    p1_ = new Player(2);    // black.
+    p2_ = new Player(3);    // whilte.
+    p1_->turnSet(true);     // 선공.
+    p2_->turnSet(false);
+
     touchwin(stdscr);
     refresh();
     is_init = true;
@@ -204,20 +206,23 @@ void GameManager::drawUI() {
     if (boardsize_ < 4) {
         std::cerr << "boardsize error" << std::endl;
     }
-    windows->push_back(new Board(boardsize_, boardY, boardX));
+    Board* b_ = new Board(boardsize_, boardY, boardX);
+    windows->push_back(b_);
     /* !!!!!TESTING CODE START!!!!!*/
-    p1_ = new __testplayer(2);
+    //p1_ = new __testplayer(2);
     PlayerPane* pp = new PlayerPane(p1_, p1Y, p1X);
-    pp->player_->score_ = 2;
-    pp->player_->turn_ = true;
+    //pp->player_->score_ = 2;
+    //pp->player_->turn_ = true;
     windows->push_back(pp);
     
-    p2_ = new __testplayer(3);
+    //p2_ = new __testplayer(3);
     pp = new PlayerPane(p2_, p2Y, p2X);
-    pp->player_->score_ = 2;
-    pp->player_->turn_ = false;
+    //pp->player_->score_ = 2;
+    //pp->player_->turn_ = false;
     windows->push_back(pp);
 
+    p1_->registerBoard(b_);
+    p2_->registerBoard(b_);
     /* !!!!!TESTING CODE ENDED!!!!!*/
     RefreshWindow();
 }
@@ -249,7 +254,18 @@ void GameManager::GameProcess() {
     /* 지금은 무한루프지만, GameManager가 
        보드판 조건을 판별해야 함. */
     keypad(stdscr, true);
-    while (true) {
+    bd->UpdateRevMap(2);
+    bd->UpdateRevMap(3);
+    while (true) { /* !isGameEnded(gameboard) */
+        int pcode = now->getCode();
+        /* 본인의 턴을 진행할 수 없다면,
+           다음 플레이어의 턴으로 넘김. */
+        if (!bd->isTurnAval(pcode)) {
+            p1_->turnSet(!(p1_->is_turn()));
+            p2_->turnSet(!(p2_->is_turn()));
+            now = (p1_->is_turn()) ? p1_ : p2_;
+            continue;
+        }
         int key = getch();
         switch (key) {
             case KEY_UP:
@@ -269,11 +285,20 @@ void GameManager::GameProcess() {
             break;
 
             case '\n': {
-                auto [ dy, dx ] = bd->getPointing();
-                gameboard[dy][dx] = now->playercode_;
-                p1_->turn_ = !(p1_->turn_);
-                p2_->turn_ = !(p2_->turn_);
-                now = (p1_->turn_) ? p1_ : p2_;
+                Pos point = bd->getPointing();
+                if (bd->pieceAval(pcode, point)) {
+                    bd->ReverseCaller(pcode, point);
+                } else continue;
+                auto [ sc_1, sc_2 ] = bd->calcScore();
+                p1_->setScore(sc_1);
+                p2_->setScore(sc_2);
+
+                p1_->turnSet(!(p1_->is_turn()));
+                p2_->turnSet(!(p2_->is_turn()));
+                now = (p1_->is_turn()) ? p1_ : p2_;
+                /* Update PlayerScore Required */
+                bd->UpdateRevMap(2);
+                bd->UpdateRevMap(3);
                 break;
             }
 
@@ -284,11 +309,13 @@ void GameManager::GameProcess() {
         RefreshWindow();
     }
 }
+/*
 #ifndef PRETESTING
 void GameManager::registerPlayer(Player* p1, Player* p2) {
     p1_ = p1; p2_ = p2;
 }
 #endif
+*/
 /* 정우건님 개선코드 */
 bool GameManager::isGameEnded(int** b_) {
 	bool isTrue = true;

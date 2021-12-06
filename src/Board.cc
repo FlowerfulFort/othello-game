@@ -120,7 +120,7 @@ Pos Board::canReverse(int code, const Pos& start, const Pos& diff) {
     auto [ ny, nx ] = start;
     bool flag = false;
     ny += dy; nx += dx;
-    while (ny >= 0 || nx >= 0 || ny < boardsize_ || nx < boardsize_) {
+    while (ny >= 0 && nx >= 0 && ny < boardsize_ && nx < boardsize_) {
         if (gameboard_[ny][nx] == code) {
             if (flag) return make_pair(ny, nx);
             else return make_pair(-1, -1);
@@ -128,7 +128,7 @@ Pos Board::canReverse(int code, const Pos& start, const Pos& diff) {
             return make_pair(-1, -1);
         } else {
             flag = true;
-            break;
+            // break;
         }
         ny += dy; nx += dx;
     }
@@ -138,7 +138,7 @@ Pos Board::canReverse(int code, const Pos& start, const Pos& diff) {
 void Board::Reverse(int code, const Pos& start, const Pos& dest, const Pos& diff) {
     auto [ ny, nx ] = start;
     auto [ dy, dx ] = diff;
-    while (ny != dest.first && nx != dest.second) {
+    while (ny != dest.first || nx != dest.second) {
         gameboard_[ny][nx] = code;
         ny += dy; nx += dx;
     }
@@ -163,6 +163,29 @@ void Board::UpdateRevMap(int code) {
 
 bool Board::isTurnAval(int code) const {
     return aval_[code-codeoffset];
+}
+bool Board::pieceAval(int code, const Pos& p) const {
+    return piece_aval_[code-codeoffset][p.first][p.second];
+}
+
+void Board::ReverseCaller(int code, const Pos& point) {
+    for (int i=0;i<8;i++) {
+        Pos dest = canReverse(code, point, differences[i]);
+        if (dest.first == -1)
+            continue;
+        Reverse(code, point, dest, differences[i]);
+    }
+}
+std::pair<int, int> Board::calcScore() const {
+    int nums[4];
+    /* 0으로 초기화 */
+    std::fill_n(nums, 4, 0);
+    for (int i=0;i<boardsize_;i++) {
+        for (int j=0;j<boardsize_;j++) {
+            nums[gameboard_[i][j]]++;
+        }
+    }
+    return make_pair(nums[2], nums[3]);
 }
 Board::~Board() {
     for (int i=0;i<boardsize_;i++) {

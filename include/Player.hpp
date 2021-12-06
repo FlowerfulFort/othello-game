@@ -18,11 +18,15 @@
 #define __PLAYER_HPP__
 #include <ncurses.h>
 #include <string>
+#include "Board.hpp"
 /* Player의 free 작업은 PlayerPane이 전담할 것. */
 class Player{
  public:
     explicit Player(short playercode);
+    short getCode() const;
+    void registerBoard(Board* b);
     void turnSet(bool turn);
+    bool is_turn() const;
     void setScore(int score);
     int getScore() const;
     bool putPiece(int** b_, int y, int x);
@@ -32,5 +36,6 @@ class Player{
     int score_;
     /* GameManager->board에 표시할 숫자. */
     short playercode_;
+    Board* gameboard_;
 };
 #endif  // headerguard

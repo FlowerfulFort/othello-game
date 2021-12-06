@@ -40,12 +40,12 @@ void PlayerPane::UpdateWindow() const {
 #else
     if (player_->is_turn()) {
         wattron(win_, COLOR_PAIR(color_pointer));
-        mvwprintw(win_, 2, 7, playerformat, player_->code());
+        mvwprintw(win_, 2, 7, playerformat, player_->getCode()-1);
         wattroff(win_, COLOR_PAIR(color_pointer));
     }
     else {
-        wattron(win_, COLOR_PAIR(player_->code());
-        mvwprintw(win_, 2, 7, playerformat, player_->code());
+        wattron(win_, COLOR_PAIR(player_->getCode()));
+        mvwprintw(win_, 2, 7, playerformat, player_->getCode()-1);
         wattroff(win_, COLOR_PAIR(color_pointer));
     }
 #endif
