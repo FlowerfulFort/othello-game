@@ -256,7 +256,7 @@ void GameManager::GameProcess() {
     keypad(stdscr, true);
     bd->UpdateRevMap(2);
     bd->UpdateRevMap(3);
-    while (true) { /* !isGameEnded(gameboard) */
+    while (!isGameEnded(gameboard)) { /* !isGameEnded(gameboard) */
         int pcode = now->getCode();
         /* 본인의 턴을 진행할 수 없다면,
            다음 플레이어의 턴으로 넘김. */
@@ -329,7 +329,7 @@ bool GameManager::isGameEnded(int** b_) {
 	}
     /* 보드판이 꽉차거나, 플레이어가 말을 놓을 수 없을때 */
 	if (countarr[1] == 0 || countarr[2] <= 0 || countarr[3] <= 0) {
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }

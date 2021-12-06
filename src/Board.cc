@@ -148,6 +148,8 @@ void Board::UpdateRevMap(int code) {
     for (int i=0;i<boardsize_;i++) {
         for (int j=0;j<boardsize_;j++) {
             bool flag = false;
+            if (gameboard_[i][j] != 1)
+                goto FLAGINPUT;
             for (int k=0;k<8;k++) {
                 auto [ y, x ] = canReverse(code, make_pair(i, j), differences[k]);
                 if (y != -1) {
@@ -155,6 +157,7 @@ void Board::UpdateRevMap(int code) {
                     break;
                 }
             }
+            FLAGINPUT:
             piece_aval_[code-codeoffset][i][j] = flag;
             aval_[code-codeoffset] = aval_[code-codeoffset] | flag;
         }
