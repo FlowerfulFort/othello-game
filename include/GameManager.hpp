@@ -52,6 +52,9 @@ class GameManager {
     void setBoardSize(int size);
     int boardsize() const;
 
+    /* Check if Game was ended. */
+    bool isGameEnded(int** b_);
+
     void askExit();
     /* Free Memory, end ncurses. */
     void ExitGame(int mode=0);
@@ -69,7 +72,6 @@ class GameManager {
     static GameManager* instance_;
     /* for updating windows. */
     std::vector<Pane*>* windows;
-    // Board* gboard_;
     int boardsize_;
     int termX_;     // terminal X size.
     int termY_;     // terminal Y size.

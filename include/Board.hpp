@@ -25,6 +25,7 @@ class Board : public Pane{
     /* calculate drawing pos. */
     WINDOW*** wboard_;
     int** gameboard_;
+    //bool*** piece_aval_;
     int boardsize_;
     //int startx_;
     //int starty_;

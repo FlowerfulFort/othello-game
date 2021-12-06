@@ -284,3 +284,23 @@ void GameManager::GameProcess() {
         RefreshWindow();
     }
 }
+void GameManager::registerPlayer(Player* p1, Player* p2) {
+    p1_ = p1; p2_ = p2;
+}
+/* 정우건님 개선코드 */
+bool GameManager:isGameEnded(int** b_) {
+	bool isTrue = true;
+	int countarr[4];
+    fill_n(countarr, 4, 0);
+
+	for (int i = 0; i < size_; i++) {
+		for (int j = 0; j < size_; j++) {
+			countarr[b_[i][j]]++;
+		}
+	}
+    /* 보드판이 꽉차거나, 플레이어가 말을 놓을 수 없을때 */
+	if (countarr[1] == 0 || countarr[2] <= 0 || countarr[3] <= 0) {
+        return false;
+    }
+    return true;
+}
