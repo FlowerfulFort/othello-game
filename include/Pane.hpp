@@ -1,5 +1,5 @@
-#ifndef __PANE_HPP__
-#define __PANE_HPP__
+#ifndef INCLUDE_PANE_HPP_
+#define INCLUDE_PANE_HPP_
 class Pane{
  public:
     explicit Pane(int y, int x): starty_(y), startx_(x) {}
@@ -13,4 +13,4 @@ class Pane{
     int startx_;
     int starty_;
 };
-#endif  // headerguard.
+#endif  // INCLUDE_PANE_HPP_

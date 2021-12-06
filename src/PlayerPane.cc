@@ -31,8 +31,7 @@ void PlayerPane::UpdateWindow() const {
         wattron(win_, COLOR_PAIR(color_pointer));
         mvwprintw(win_, 2, 7, playerformat, player_->playercode_);
         wattroff(win_, COLOR_PAIR(color_pointer));
-    }
-    else {
+    } else {
         wattron(win_, COLOR_PAIR(player_->playercode_));
         mvwprintw(win_, 2, 7, playerformat, player_->playercode_);
         wattroff(win_, COLOR_PAIR(player_->playercode_));
@@ -42,8 +41,7 @@ void PlayerPane::UpdateWindow() const {
         wattron(win_, COLOR_PAIR(color_pointer));
         mvwprintw(win_, 2, 7, playerformat, player_->getCode()-1);
         wattroff(win_, COLOR_PAIR(color_pointer));
-    }
-    else {
+    } else {
         wattron(win_, COLOR_PAIR(player_->getCode()));
         mvwprintw(win_, 2, 7, playerformat, player_->getCode()-1);
         wattroff(win_, COLOR_PAIR(color_pointer));

@@ -1,9 +1,9 @@
 #include "Player.hpp"
 #include "Board.hpp"
 
-Player::Player(short playercode):
+Player::Player(int playercode):
     playercode_(playercode), score_(2) {}
-short Player::getCode() const { 
+int Player::getCode() const {
     return playercode_;
 }
 void Player::turnSet(bool turn) {

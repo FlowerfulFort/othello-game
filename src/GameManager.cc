@@ -1,10 +1,10 @@
 #include <ncurses.h>
+#include <unistd.h>
 #include <iostream>
 #include <vector>
 #include <cstdlib>
 #include <clocale>
 #include <csignal>
-#include <unistd.h>
 #include "GameManager.hpp"
 #include "Board.hpp"
 #include "PlayerPane.hpp"
@@ -72,7 +72,7 @@ void GameManager::WindowInitialize() {
     WINDOW* boardMsg = subwin(stdscr,
         boardMsgSizeY, boardMsgSizeX, msgStartY, msgStartX);
     box(boardMsg, 0, 0);
-    
+
     mvwprintw(boardMsg, 2, 9, "Select the board size");
     init_pair(color_alert, COLOR_BLACK, COLOR_WHITE);
     int type = 6;
@@ -109,12 +109,12 @@ void GameManager::WindowInitialize() {
             case KEY_RIGHT:
             if (type < 12) type+=2;
             break;
-            
+
             case '\n':      // KEY_ENTER.
             flag = false;
             break;
         }   // endswitch
-        //sleep(1);   // for testing.
+        // sleep(1);   // for testing.
     }   // endwhile
     boardsize_ = type;
     delwin(boardMsg);
@@ -182,7 +182,7 @@ void GameManager::askExit() {
     is_init = false;
 }
 void GameManager::ExitGame(int mode /*default=0*/) {
-    if(mode == 0) {
+    if (mode == 0) {
         endwin();
         exit(0);
     }
@@ -197,7 +197,6 @@ void GameManager::ExitGame(int mode /*default=0*/) {
        it exists for game restart. */
 }
 void GameManager::drawUI() {
-    /* Hard coding, will be edited */
     int p1Y = 0;
     int p1X = 0;
     int p2Y = p1Y + height_;
@@ -210,22 +209,14 @@ void GameManager::drawUI() {
     }
     Board* b_ = new Board(boardsize_, boardY, boardX);
     windows->push_back(b_);
-    /* !!!!!TESTING CODE START!!!!!*/
-    //p1_ = new __testplayer(2);
     PlayerPane* pp = new PlayerPane(p1_, p1Y, p1X);
-    //pp->player_->score_ = 2;
-    //pp->player_->turn_ = true;
     windows->push_back(pp);
-    
-    //p2_ = new __testplayer(3);
+
     pp = new PlayerPane(p2_, p2Y, p2X);
-    //pp->player_->score_ = 2;
-    //pp->player_->turn_ = false;
     windows->push_back(pp);
 
     p1_->registerBoard(b_);
     p2_->registerBoard(b_);
-    /* !!!!!TESTING CODE ENDED!!!!!*/
     RefreshWindow();
 }
 void GameManager::RefreshWindow() const {
@@ -290,7 +281,9 @@ void GameManager::GameProcess() {
                 Pos point = bd->getPointing();
                 if (bd->pieceAval(pcode, point)) {
                     bd->ReverseCaller(pcode, point);
-                } else continue;
+                } else {
+                    continue;
+                }
                 auto [ sc_1, sc_2 ] = bd->calcScore();
                 p1_->setScore(sc_1);
                 p2_->setScore(sc_2);
@@ -328,17 +321,17 @@ void GameManager::registerPlayer(Player* p1, Player* p2) {
 */
 /* 정우건님 개선코드 */
 bool GameManager::isGameEnded(int** b_) {
-	bool isTrue = true;
-	int countarr[4];
+    bool isTrue = true;
+    int countarr[4];
     std::fill_n(countarr, 4, 0);
 
-	for (int i = 0; i < boardsize_; i++) {
-		for (int j = 0; j < boardsize_; j++) {
-			countarr[b_[i][j]]++;
-		}
-	}
+    for (int i = 0; i < boardsize_; i++) {
+        for (int j = 0; j < boardsize_; j++) {
+            countarr[b_[i][j]]++;
+        }
+    }
     /* 보드판이 꽉차거나, 플레이어가 말을 놓을 수 없을때 */
-	if (countarr[1] == 0 || countarr[2] <= 0 || countarr[3] <= 0) {
+    if (countarr[1] == 0 || countarr[2] <= 0 || countarr[3] <= 0) {
         return true;
     }
     return false;

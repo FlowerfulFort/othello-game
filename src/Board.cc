@@ -18,19 +18,19 @@ static Pos differences[8] = {
 
 constexpr int codeoffset = 2;       // 컴파일타임 상수.
 
-Board::Board(int boardsize, int y, int x): 
+Board::Board(int boardsize, int y, int x):
     boardsize_(boardsize), Pane(y, x) {
-    //mvprintw(1,1,"boardsize: %d", boardsize_);
+    // mvprintw(1,1,"boardsize: %d", boardsize_);
     gameboard_ = new int*[boardsize_];      // boardsize_만큼 할당.
     wboard_ = new WINDOW**[boardsize_];     // boardsize_만큼 할당.
-    for (int i=0;i<boardsize_;i++) {
+    for (int i=0; i < boardsize_; i++) {
         gameboard_[i] = new int[boardsize_];
         /* gameboard_[i] 주소값부터 boardsize_만큼의 데이터들을
            1로 초기화시키는 함수. */
         std::fill_n(gameboard_[i], boardsize_, 1);
         wboard_[i] = new WINDOW*[boardsize_];
 
-        for (int j=0;j<boardsize_;j++) {
+        for (int j=0; j < boardsize_; j++) {
             /* 기본적인 UI 세팅. */
             /* 각 칸에 맞는 WINDOW를 생성합니다. */
             wboard_[i][j] = subwin(stdscr, 4, 7, i*3+starty_, j*6+startx_);
@@ -40,7 +40,8 @@ Board::Board(int boardsize, int y, int x):
             /* 처음엔 비어있으니 공백으로 채웁니다. */
             mvwprintw(wboard_[i][j], 1, 1, "     ");
             mvwprintw(wboard_[i][j], 2, 1, "     ");
-            wattroff(wboard_[i][j], COLOR_PAIR(color_board));   // 색상변경원위치.
+            wattroff(wboard_[i][j], COLOR_PAIR(color_board));
+            // 색상변경원위치.
         }
     }
     /* 2==black , 3==white */
@@ -54,11 +55,11 @@ Board::Board(int boardsize, int y, int x):
     /* 보드크기만큼 각 플레이어에게도 할당해 줍니다. */
     piece_aval_[0] = new bool*[boardsize_];
     piece_aval_[1] = new bool*[boardsize_];
-    for (int i=0;i<boardsize_;i++) {
+    for (int i=0; i < boardsize_; i++) {
         piece_aval_[0][i] = new bool[boardsize_];
         std::fill_n(piece_aval_[0][i], boardsize_, false);
     }
-    for (int i=0;i<boardsize_;i++) {
+    for (int i=0; i < boardsize_; i++) {
         piece_aval_[1][i] = new bool[boardsize_];
         std::fill_n(piece_aval_[1][i], boardsize_, false);
     }
@@ -81,8 +82,8 @@ void Board::UpdateWindow() {
 #else
 void Board::UpdateWindow() const {
 #endif
-    for (int i=0;i<boardsize_;i++) {
-        for (int j=0;j<boardsize_;j++) {
+    for (int i=0; i < boardsize_; i++) {
+        for (int j=0; j < boardsize_; j++) {
             /* wboard_의 모든 요소를 순회합니다. */
             WINDOW* pos = wboard_[i][j];
             /* 편한 코딩을 위한 참조자입니다. */
@@ -105,7 +106,7 @@ void Board::UpdateWindow() const {
         }
     }
     /* 만약 포인터가 배열의 좌표를 벗어나 SIGSEGV의 위험이 있다면, */
-    if(pointy_ < 0 || pointx_ < 0 || 
+    if (pointy_ < 0 || pointx_ < 0 ||
         pointy_ >= boardsize_ || pointx_ >= boardsize_) {
         endwin();   // Ncurses 종료
         /* 표준에러스트림에 에러문구 출력 */
@@ -176,7 +177,8 @@ Pos Board::canReverse(int code, const Pos& start, const Pos& diff) {
     return make_pair(-1, -1);   // cant put piece.
 }
 /* 놓음과 동시에 단방향 뒤집기 기능을 함. */
-void Board::Reverse(int code, const Pos& start, const Pos& dest, const Pos& diff) {
+void Board::Reverse(int code, const Pos& start,
+    const Pos& dest, const Pos& diff) {
     auto [ ny, nx ] = start;
     auto [ dy, dx ] = diff;
     /* 목표지점까지 code로 채움 */
@@ -188,15 +190,17 @@ void Board::Reverse(int code, const Pos& start, const Pos& dest, const Pos& diff
 /* 두 플레이어가 돌을 놓을 수 있는 맵을 업데이트함. */
 void Board::UpdateRevMap(int code) {
     aval_[code-codeoffset] = false;
-    for (int i=0;i<boardsize_;i++) {
-        for (int j=0;j<boardsize_;j++) {
+    for (int i=0; i < boardsize_; i++) {
+        for (int j=0; j < boardsize_; j++) {
             bool flag = false;
             /* 해당 좌표에 돌이 있다면 */
             if (gameboard_[i][j] != 1)
                 goto FLAGINPUT;     // 루프 건너뛰기
-            for (int k=0;k<8;k++) {
-                /* 특정 지점(y=i, x=j)에서 differences방향으로 돌을 놓을수 있는지 검사. */
-                auto [ y, x ] = canReverse(code, make_pair(i, j), differences[k]);
+            for (int k=0; k < 8; k++) {
+                /* 특정 지점(y=i, x=j)에서 
+                   differences방향으로 돌을 놓을수 있는지 검사. */
+                auto [ y, x ] =
+                    canReverse(code, make_pair(i, j), differences[k]);
                 if (y != -1) {      // 돌을 놓을수 있다면,
                     flag = true;    // flag 설정.
                     break;
@@ -221,7 +225,7 @@ bool Board::pieceAval(int code, const Pos& p) const {
 }
 /* 특정 플레이어가 돌을 놓는 함수. */
 void Board::ReverseCaller(int code, const Pos& point) {
-    for (int i=0;i<8;i++) {
+    for (int i=0; i < 8; i++) {
         Pos dest = canReverse(code, point, differences[i]);
         if (dest.first == -1)   // 돌을 differences[i]방향으로 못놓는다면,
             continue;           // 다음루프.
@@ -234,8 +238,8 @@ std::pair<int, int> Board::calcScore() const {
     int nums[4];
     /* 0으로 초기화 */
     std::fill_n(nums, 4, 0);
-    for (int i=0;i<boardsize_;i++) {
-        for (int j=0;j<boardsize_;j++) {
+    for (int i=0; i < boardsize_; i++) {
+        for (int j=0; j < boardsize_; j++) {
             nums[gameboard_[i][j]]++;
         }
     }
@@ -243,9 +247,9 @@ std::pair<int, int> Board::calcScore() const {
 }
 /* 메모리 해제 */
 Board::~Board() {
-    for (int i=0;i<boardsize_;i++) {
+    for (int i=0; i < boardsize_; i++) {
         delete[] gameboard_[i];
-        for (int j=0;j<boardsize_;j++) {
+        for (int j=0; j < boardsize_; j++) {
             delwin(wboard_[i][j]);
         }
         delete[] wboard_[i];

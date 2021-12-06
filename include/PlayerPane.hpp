@@ -1,5 +1,5 @@
-#ifndef __PLAYERPANE_HPP__
-#define __PLAYERPANE_HPP__
+#ifndef INCLUDE_PLAYERPANE_HPP_
+#define INCLUDE_PLAYERPANE_HPP_
 #include <ncurses.h>
 #include "Pane.hpp"
 #include "Player.hpp"
@@ -31,4 +31,4 @@ class PlayerPane : public Pane {
 #endif  // if not defined PRETESTING
     bool isWinner_;
 };
-#endif  // headerguard.
+#endif  // INCLUDE_PLAYERPANE_HPP_

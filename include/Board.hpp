@@ -1,5 +1,5 @@
-#ifndef __BOARD_HPP__       // headerguard.
-#define __BOARD_HPP__
+#ifndef INCLUDE_BOARD_HPP_
+#define INCLUDE_BOARD_HPP_
 #include <ncurses.h>        // Ncurses
 #include <utility>          // pair<T, V>
 #include "GameManager.hpp"  // Class GameManager.
@@ -58,7 +58,7 @@ class Board : public Pane{      // Class Pane 상속.
        흑돌의 스코어가 pair<>.first이고, 
        백돌의 스코어가 pair<>.second 입니다. */
     std::pair<int, int> calcScore() const;
-    
+
     /* 주황색 사용자 돌 포인터를 각 방향으로 움직이는 함수입니다. */
     void pointUp();
     void pointDown();
@@ -74,6 +74,7 @@ class Board : public Pane{      // Class Pane 상속.
     /* 소멸자. 할당된 wboard_, gameboard_ 등
        각종 동적할당 자원들을 해제합니다. */
     ~Board();
+
  private:
     /* calculate drawing pos. */
     WINDOW*** wboard_;      // 보드판을 그리기 위한 WINDOW.
@@ -98,4 +99,4 @@ class Board : public Pane{      // Class Pane 상속.
     /* GameManager는 Board의 private 멤버에 접근 가능 */
     friend GameManager;
 };
-#endif  // headerguard
+#endif  // INCLUDE_BOARD_HPP_

@@ -14,16 +14,16 @@
    말을 놓음과 동시에 해도 상관없다.
 */
 
-#ifndef __PLAYER_HPP__
-#define __PLAYER_HPP__
+#ifndef INCLUDE_PLAYER_HPP_
+#define INCLUDE_PLAYER_HPP_
 #include <ncurses.h>
 #include <string>
 #include "Board.hpp"
 /* Player의 free 작업은 PlayerPane이 전담할 것. */
 class Player{
  public:
-    explicit Player(short playercode);
-    short getCode() const;
+    explicit Player(int playercode);
+    int getCode() const;
     void registerBoard(Board* b);
     void turnSet(bool turn);
     bool is_turn() const;
@@ -35,7 +35,7 @@ class Player{
     bool turn_;
     int score_;
     /* GameManager->board에 표시할 숫자. */
-    short playercode_;
+    int playercode_;
     Board* gameboard_;
 };
-#endif  // headerguard
+#endif  // INCLUDE_PLAYER_HPP_

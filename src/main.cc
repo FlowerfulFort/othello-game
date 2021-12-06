@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
     gm->drawUI();
     gm->GameProcess();
     gm->askExit();
-    mvprintw(2,1,"Exit Canceled");
+    mvprintw(2, 1, "Exit Canceled");
     getch();    // wait for comfirm test.
     gm->ExitGame();
     return 0;

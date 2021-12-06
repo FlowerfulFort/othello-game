@@ -10,8 +10,8 @@
    1의 경우에는 턴수를 검사하여 간단히 조사할 수 있지만,
    2의 경우가 어렵겠네요.
 */
-#ifndef __GAMEMANAGER_HPP__
-#define __GAMEMANAGER_HPP__
+#ifndef INCLUDE_GAMEMANAGER_HPP_
+#define INCLUDE_GAMEMANAGER_HPP_
 #include <vector>
 #include "Player.hpp"
 #include "Pane.hpp"
@@ -47,7 +47,7 @@ class GameManager {
     void registerPlayer(Player* p1, Player* p2);
     /* draw Player UserInterface. */
     void drawUI();
-    
+
     /* Game Process */
     void GameProcess();
     void setBoardSize(int size);
@@ -58,7 +58,8 @@ class GameManager {
 
     void askExit();
     /* Free Memory, end ncurses. */
-    void ExitGame(int mode=0);
+    void ExitGame(int mode = 0);
+
  private:
     GameManager();  // private constructor.
     bool is_init;
@@ -77,4 +78,4 @@ class GameManager {
     int termX_;     // terminal X size.
     int termY_;     // terminal Y size.
 };
-#endif  // headerguard
+#endif  // INCLUDE_GAMEMANAGER_HPP_

@@ -1,13 +1,11 @@
-#ifdef PRETESTING
-#ifndef __TESTPLAYER_HPP__
-#define __TESTPLAYER_HPP__
+#ifndef INCLUDE_TESTPLAYER_HPP_
+#define INCLUDE_TESTPLAYER_HPP_
 
 struct __testplayer {
-    __testplayer(int playercode):playercode_(playercode) {}
+    explicit __testplayer(int playercode):playercode_(playercode) {}
     int score_;
     int playercode_;
     bool turn_;
 };
 
-#endif  // __TESTPLAYER_HPP__
-#endif  // PRETESTING
+#endif  // INCLUDE_TESTPLAYER_HPP_
