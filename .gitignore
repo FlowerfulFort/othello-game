@@ -13,3 +13,6 @@ obj/
 
 # ignore main binary.
 main
+
+# ignore .sh script
+*.sh
