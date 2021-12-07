@@ -12,13 +12,13 @@
 #ifdef PRETESTING
 #include "testplayer.hpp"
 #endif
-
+/* 토스트 메세지의 창 크기를 결정하는 상수입니다. */
 constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
 constexpr int exitMsgSizeY = 7;
 constexpr int exitMsgSizeX = 40;
-constexpr int winnerMsgSizeY = 36;
-constexpr int winnerMsgSizeX = 7;
+// constexpr int winnerMsgSizeY = 36;
+// constexpr int winnerMsgSizeX = 7;
 /* moved into GameManager.hpp
 constexpr int color_board = 1;
 constexpr int color_p1 = 2;     // black.
@@ -26,6 +26,7 @@ constexpr int color_p2 = 3;     // white.
 constexpr int color_pointer = 4;
 constexpr int color_alert = 7;
 */
+/* Singleton Class */
 GameManager* GameManager::instance_ = nullptr;
 GameManager* GameManager::GetManager() {
     if (!instance_) {
@@ -33,6 +34,7 @@ GameManager* GameManager::GetManager() {
     }
     return instance_;
 }
+/* 각 포인터를 nullptr로 초기화합니다. */
 GameManager::GameManager() {
     p1_ = nullptr;
     p2_ = nullptr;
@@ -45,11 +47,18 @@ void sigint_handle(int sig) {
     // ins->ExitGame(1);
     ins->askExit();
 }
-
+/* 프로그램이 시작되기 전 초기 세팅단계입니다. */
 void GameManager::GameInitialize() const {
-    std::setlocale(LC_ALL, "");     // for UNICODE output.
+    /* 유니코드 출력을 위한 locale 설정입니다. */
+    std::setlocale(LC_ALL, "");
+    /* Ctrl+C 입력에 대응하는 signal handler 입니다. */
     std::signal(SIGINT, sigint_handle);
 }
+/* COLOR_PAIR(x)로 표현되는 색깔을 세팅합니다.
+   예를 들어 init_pair(2, COLOR_WHITE, COLOR_BLACK);
+   의 경우에는 2번에 흰색글자, 검은색 배경을 설정합니다.
+   따라서 COLOR_PAIR(2)로 검은배경에 흰글자를
+   표현할 수 있습니다. */
 void GameManager::InitializeColorSet() const {
     init_pair(color_board, COLOR_BLACK, COLOR_GREEN);
     init_pair(color_p1, COLOR_WHITE, COLOR_BLACK);
@@ -58,12 +67,12 @@ void GameManager::InitializeColorSet() const {
     init_pair(color_alert, COLOR_BLACK, COLOR_WHITE);
 }
 void GameManager::WindowInitialize() {
-    initscr();
+    initscr();              // Ncurses 시작.
     noecho();
-    curs_set(false);
-    start_color();
-    InitializeColorSet();
-    resetTerm();
+    curs_set(false);        // 커서숨기기
+    start_color();          // 컬러표현 시작
+    InitializeColorSet();   // 컬러세트 초기화
+    resetTerm();            // 터미널 y, x크기 수집.
     // getmaxyx(stdscr, termY_, termX_); -> resetTerm();
 
     /* draw Message into center of screen. */
@@ -72,12 +81,12 @@ void GameManager::WindowInitialize() {
     WINDOW* boardMsg = subwin(stdscr,
         boardMsgSizeY, boardMsgSizeX, msgStartY, msgStartX);
     box(boardMsg, 0, 0);
-
+    /* 사용자에게 보드사이즈 크기를 입력받습니다. */
     mvwprintw(boardMsg, 2, 9, "Select the board size");
     init_pair(color_alert, COLOR_BLACK, COLOR_WHITE);
     int type = 6;
     bool flag = true;
-    keypad(boardMsg, true);
+    keypad(boardMsg, true);     // 특수키 입력을 허용합니다.
     while (flag) {
         mvwprintw(boardMsg, 4, 2, "  6x6      8x8     10x10     12x12 ");
         wattrset(boardMsg, COLOR_PAIR(color_alert));
@@ -102,11 +111,11 @@ void GameManager::WindowInitialize() {
         wattroff(boardMsg, COLOR_PAIR(color_alert));
         int arrow = wgetch(boardMsg);
         switch (arrow) {
-            case KEY_LEFT:
+            case KEY_LEFT:   // 왼쪽 화살표 입력
             if (type > 6) type-=2;
             break;
 
-            case KEY_RIGHT:
+            case KEY_RIGHT:  // 오른쪽 화살표 입력
             if (type < 12) type+=2;
             break;
 
