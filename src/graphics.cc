@@ -91,7 +91,7 @@ bool drawDigit(int y, int x, const int digit) {
 }
 bool wdrawDigit(WINDOW* window, int y, int x, const int digit) {
     /* 각각의 자릿수를 추출합니다. */
-    int d0 = (digit >= 100);
+    int d0 = (digit / 100);
     int d1 = (digit%100)/10;
     int d2 = digit%10;
 
@@ -104,7 +104,7 @@ bool wdrawDigit(WINDOW* window, int y, int x, const int digit) {
     char d2filename[24];
 
     /* snprintf()로 파일경로를 만듭니다. */
-    std::snprintf(d0filename, sizeof(d0filename), fileformat, 1);
+    std::snprintf(d0filename, sizeof(d0filename), fileformat, d0);
     std::snprintf(d1filename, sizeof(d1filename), fileformat, d1);
     std::snprintf(d2filename, sizeof(d2filename), fileformat, d2);
 
