@@ -88,7 +88,7 @@ void GameManager::WindowInitialize() {
     bool flag = true;
     keypad(boardMsg, true);     // 특수키 입력을 허용합니다.
     while (flag) {
-        mvwprintw(boardMsg, 4, 2, "  6x6      8x8     10x10     12x12 ");
+        mvwprintw(boardMsg, 4, 2, "  6x6      8x8     10x10     Custom ");
         wattrset(boardMsg, COLOR_PAIR(color_alert));
         switch (type) {
             case 6:
@@ -104,7 +104,7 @@ void GameManager::WindowInitialize() {
             break;
 
             case 12:
-            mvwprintw(boardMsg, 4, 30, " 12x12 ");
+            mvwprintw(boardMsg, 4, 30, " Custom ");
             break;
         }   // endswitch
         wrefresh(boardMsg);
@@ -120,11 +120,28 @@ void GameManager::WindowInitialize() {
             break;
 
             case '\n':      // KEY_ENTER.
+            if (type == 12) {   // when Custom board size.
+                mvwprintw(boardMsg, 5, 2, 
+                    "Enter even number(>=6): ");
+                echo();
+                curs_set(1);
+                INPUT:
+                wscanw(boardMsg, "%d", &type);
+                if (type % 2 == 1 || type < 6 || type > 32) {
+                    mvwprintw(boardMsg, 5, 26, "    ");
+                    wmove(boardMsg, 5, 26);
+                    goto INPUT;
+                }
+                noecho();
+                curs_set(0);
+                goto MSGEND;
+            }
             flag = false;
             break;
         }   // endswitch
         // sleep(1);   // for testing.
     }   // endwhile
+    MSGEND:
     boardsize_ = type;
     delwin(boardMsg);
     clear();
@@ -312,8 +329,8 @@ void GameManager::GameProcess() {
         }
         RefreshWindow();
     }
-    int msgStartY = (termY_ - winnerMsgSizeY) / 2;
-    int msgStartX = (termX_ - winnerMsgSizeX) / 2;
+    // int msgStartY = (termY_ - winnerMsgSizeY) / 2;
+    // int msgStartX = (termX_ - winnerMsgSizeX) / 2;
     if (p1_->getScore() > p2_->getScore()) {
         dynamic_cast<PlayerPane*>((*windows)[1])->setWin();
     } else if (p2_->getScore() > p1_->getScore()) {
