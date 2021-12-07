@@ -70,6 +70,7 @@ void GameManager::WindowInitialize() {
     initscr();              // Ncurses 시작.
     noecho();
     curs_set(false);        // 커서숨기기
+    cbreak();
     start_color();          // 컬러표현 시작
     InitializeColorSet();   // 컬러세트 초기화
     resetTerm();            // 터미널 y, x크기 수집.
@@ -227,7 +228,7 @@ void GameManager::askExit() {
     delwin(msg);
     touchwin(stdscr);
     refresh();
-    is_init = false;
+    // is_init = false;
 }
 /* 게임을 종료하는 함수입니다.
    이 역시 자세하게 쓸 필요는 없습니다. */
