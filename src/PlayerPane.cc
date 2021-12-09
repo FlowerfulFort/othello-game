@@ -31,7 +31,7 @@ void PlayerPane::UpdateWindow() {
 void PlayerPane::UpdateWindow() const {
 #endif
     /* UI를 지우고, 경계선을 다시 만듭니다. */
-    werase(win_); 
+    werase(win_);
     box(win_, 0, 0);
 #ifdef PRETESTING
     if (player_->turn_) {
