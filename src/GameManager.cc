@@ -161,7 +161,7 @@ void GameManager::WindowInitialize() {
     refresh();              // 지운 화면을 업데이트합니다.
 
     /* windows 변수는 Pane의 주소값을 저장하는 vector입니다. */
-    windows = new std::vector<Pane*>;
+    windows = new std::vector<Pane*>();
 
     /* 흑돌이 언제나 선공입니다. */
     p1_ = new Player(2);    // 흑돌.
