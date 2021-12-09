@@ -31,7 +31,8 @@ void PlayerPane::UpdateWindow() {
 void PlayerPane::UpdateWindow() const {
 #endif
     /* UI를 지우고, 경계선을 다시 만듭니다. */
-    wclear(win_); box(win_, 0, 0);
+    werase(win_); 
+    box(win_, 0, 0);
 #ifdef PRETESTING
     if (player_->turn_) {
         wattron(win_, COLOR_PAIR(color_pointer));

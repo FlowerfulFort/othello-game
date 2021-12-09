@@ -121,9 +121,9 @@ void Board::UpdateWindow() const {
     mvwprintw(pos, 2, 2, piece);
     wattroff(pos, COLOR_PAIR(color_pointer));
     /* Ncurses의 스크린을 리프레쉬 */
-    touchwin(stdscr);
+    //touchwin(stdscr);
     /* 리프레쉬 */
-    refresh();
+    //refresh();
 }
 /* 포인터를 이동시키는 함수 */
 void Board::pointUp() {
