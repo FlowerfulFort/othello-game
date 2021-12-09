@@ -4,17 +4,24 @@ INC=-I./include
 SRC=./src
 OBJ=./obj
 OBJs=$(OBJ)/GameManager.o $(OBJ)/graphics.o $(OBJ)/Board.o $(OBJ)/PlayerPane.o $(OBJ)/Player.o
-
+TESTSRC=./src/test
+TESTSRCs=$(TESTSRC)/Board.cpp $(TESTSRC)/Game.cpp $(TESTSRC)/GameManager.cpp $(TESTSRC)/Position.cpp
+TESTHDR=./include/test
+TESTOBJs=testobj/Board.o testobj/Game.o testobj/GameManager.o testobj/Position.o
+GTEST_DIR=./googletest/googletest
+GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
+                $(GTEST_DIR)/include/gtest/internal/*.h
+GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
+CXXFLAGS += -pthread
+CPPFLAGS += -isystem $(GTEST_DIR)/include
 all: main
-test: test.test
-graphictest: graphictest.test
-resize: resize.test
 
 cleanobj:
 	rm obj/*.o
 clean: 
-	rm main *.test
-
+	rm main test
+cleantest:
+	rm testobj/* test
 $(OBJ)/GameManager.o: $(SRC)/GameManager.cc
 	$(CXX) $(LIBs) $(INC) -c $(SRC)/GameManager.cc -o $(OBJ)/GameManager.o
 
@@ -33,13 +40,36 @@ $(OBJ)/Player.o: $(SRC)/Player.cc
 main: $(SRC)/main.cc $(OBJs)
 	$(CXX) $(LIBs) $(INC) -o $@ $^
 
-test.test: test.cc
-	$(CXX) $(LIBs) -o $@ $^
+testobj/gtest-all.o : $(GTEST_SRCS_)
+	g++ $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+        $(GTEST_DIR)/src/gtest-all.cc -o $@
 
-graphictest.test: graphictest.cc $(OBJ)/graphics.o
-	$(CXX) $(LIBs) $(INC) -o $@ $^
+testobj/gtest_main.o : $(GTEST_SRCS_)
+	g++ $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+        $(GTEST_DIR)/src/gtest_main.cc -o $@
 
-resize.test: resizeterm.cc
-	$(CXX) $(LIBs) $(INC) -o $@ $^
+testobj/gtest.a : testobj/gtest-all.o
+	$(AR) $(ARFLAGS) $@ $^ -o $@
 
-.PHONY: all clean cleanobj test resize graphictest
+testobj/gtest_main.a : testobj/gtest-all.o testobj/gtest_main.o
+	$(AR) $(ARFLAGS) $@ $^ -o $@
+
+testobj/test.o: $(TESTSRC)/test.cpp $(GTEST_HEADERS) $(TESTSRCs)
+	g++ $(CPPFLAGS) $(INC) $(CXXFLAGS) -std=c++17 -c $(TESTSRC)/test.cpp -o $@
+
+testobj/Board.o: $(TESTSRC)/Board.cpp
+	$(CXX) $(INC) -c $^ -o $@
+
+testobj/Game.o: $(TESTSRC)/Game.cpp
+	$(CXX) $(INC) -c $^ -o $@
+
+testobj/GameManager.o: $(TESTSRC)/GameManager.cpp
+	$(CXX) $(INC) -c $^ -o $@
+
+testobj/Position.o: $(TESTSRC)/Position.cpp
+	$(CXX) $(INC) -c $^ -o $@
+
+test: testobj/test.o testobj/gtest_main.a $(TESTOBJs)
+	g++ $(CPPFLAGS) $(CXXFLAGS) -std=c++17 $^ -o $@
+
+.PHONY: all clean cleanobj cleantest

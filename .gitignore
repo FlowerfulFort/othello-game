@@ -4,8 +4,11 @@ src/test.cc
 # ignore testing files.
 *.test
 
-# ignore testing folders.
-test/
+# ignore testing files..
+src/test/
+include/test
+test
+testobj/
 
 # ignore object files.
 obj/
