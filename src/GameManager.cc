@@ -127,7 +127,7 @@ void GameManager::WindowInitialize() {
             case '\n':      // KEY_ENTER.
             if (type == 12) {   // when Custom board size.
                 /* 커스텀일때, 사용자로부터 입력을 받아야 합니다. */
-                mvwprintw(boardMsg, 5, 2, 
+                mvwprintw(boardMsg, 5, 2,
                     "Enter even number(>=6): ");
                 echo();         // 사용자의 입력을 보이게 합니다.
                 curs_set(1);    // 커서를 보이게 합니다.
@@ -359,7 +359,7 @@ void GameManager::GameProcess() {
             case KEY_RIGHT:
             bd->pointRight();
             break;
-            
+
             /* 엔터를 입력할 시 상황입니다. */
             case '\n': {
                 /* 현재 포인터 좌표를 입력받습니다. */
@@ -376,7 +376,7 @@ void GameManager::GameProcess() {
                 auto [ sc_1, sc_2 ] = bd->calcScore();
                 p1_->setScore(sc_1);    // 흑돌 점수
                 p2_->setScore(sc_2);    // 백돌 점수
-                
+
                 /* 턴을 넘깁니다. */
                 p1_->turnSet(!(p1_->is_turn()));
                 p2_->turnSet(!(p2_->is_turn()));
