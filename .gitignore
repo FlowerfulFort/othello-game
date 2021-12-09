@@ -1,6 +1,5 @@
 # ignore home directory cc files.
-*.cc
-!src/*.cc
+src/test.cc
 
 # ignore testing files.
 *.test
@@ -16,3 +15,6 @@ main
 
 # ignore .sh script
 *.sh
+
+# ignore googletest
+googletest/
