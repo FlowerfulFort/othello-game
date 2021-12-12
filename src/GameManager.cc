@@ -17,6 +17,9 @@ constexpr int boardMsgSizeY = 7;
 constexpr int boardMsgSizeX = 40;
 constexpr int exitMsgSizeY = 7;
 constexpr int exitMsgSizeX = 40;
+
+static bool debugflag = false;
+
 // constexpr int winnerMsgSizeY = 36;
 // constexpr int winnerMsgSizeX = 7;
 /* moved into GameManager.hpp
@@ -329,6 +332,7 @@ void GameManager::GameProcess() {
        함수들은 2가 흑돌이고 3이 백돌임을 기억하시면 됩니다. */
     bd->UpdateRevMap(2);    // 흑돌
     bd->UpdateRevMap(3);    // 백돌
+    std::string debugmsg;
     while (!isGameEnded(gameboard)) { /* !isGameEnded(gameboard) */
         /* 현재 플레이어의 코드를 받습니다. */
         int pcode = now->getCode();
@@ -346,22 +350,27 @@ void GameManager::GameProcess() {
             /* 주황색 포인터를 움직입니다. */
             case KEY_UP:
             bd->pointUp();
+            debugmsg = "KEY_UP";
             break;
 
             case KEY_DOWN:
             bd->pointDown();
+            debugmsg = "KEY_DOWN";
             break;
 
             case KEY_LEFT:
             bd->pointLeft();
+            debugmsg = "KEY_LEFT";
             break;
 
             case KEY_RIGHT:
             bd->pointRight();
+            debugmsg = "KEY_RIGHT";
             break;
 
             /* 엔터를 입력할 시 상황입니다. */
             case '\n': {
+                debugmsg = "KEY_ENTER";
                 /* 현재 포인터 좌표를 입력받습니다. */
                 Pos point = bd->getPointing();
                 /* 현재 플레이어가 그곳에 말을
@@ -370,7 +379,7 @@ void GameManager::GameProcess() {
                     /* 놓을수 잇으면 놓습니다. */
                     bd->ReverseCaller(pcode, point);
                 } else {
-                    continue;   // 아니면 루프로 돌아갑니다.
+                    break;   // 아니면 루프로 돌아갑니다.
                 }
                 /* 점수를 갱신해야 합니다. */
                 auto [ sc_1, sc_2 ] = bd->calcScore();
@@ -387,9 +396,26 @@ void GameManager::GameProcess() {
                 break;
             }
 
+            case KEY_F(3):
+            debugflag = !debugflag;
+            if (debugflag) {
+                mvprintw(termY_-2, 0, "DebugMode ON");
+                debugmsg = "KEY_F3";
+            } else {
+                move(termY_-2, 0); clrtoeol();
+                move(termY_-1, 0); clrtoeol();
+            }
+            refresh();
+            break;
+
             default:    // 이외의 입력은 루프로 돌아갑니다.
             continue;
             break;
+        }
+        if(debugflag) {
+            move(termY_-1, 0); clrtoeol();
+            mvprintw(termY_-1, 0, "KeyPressed: %s", debugmsg.c_str());
+            refresh();
         }
         /* 판이 바뀌면 업데이트 합니다. */
         RefreshWindow();
