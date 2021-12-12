@@ -412,7 +412,7 @@ void GameManager::GameProcess() {
             continue;
             break;
         }
-        if(debugflag) {
+        if (debugflag) {
             move(termY_-1, 0); clrtoeol();
             mvprintw(termY_-1, 0, "KeyPressed: %s", debugmsg.c_str());
             refresh();
