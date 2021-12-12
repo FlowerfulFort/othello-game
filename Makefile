@@ -14,12 +14,16 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 CXXFLAGS += -pthread
 CPPFLAGS += -isystem $(GTEST_DIR)/include
-all: main
+all: directory main
+test: testdir mktest
 
-cleanobj:
-	rm obj/*.o
+directory:
+	mkdir -p obj
+testdir:
+	mkdir -p testobj
+
 clean: 
-	rm main test
+	rm main obj/*.o
 cleantest:
 	rm testobj/* test
 $(OBJ)/GameManager.o: $(SRC)/GameManager.cc
@@ -69,7 +73,7 @@ testobj/GameManager.o: $(TESTSRC)/GameManager.cpp
 testobj/Position.o: $(TESTSRC)/Position.cpp
 	$(CXX) $(INC) -c $^ -o $@
 
-test: testobj/test.o testobj/gtest_main.a $(TESTOBJs)
+mktest: testobj/test.o testobj/gtest_main.a $(TESTOBJs)
 	g++ $(CPPFLAGS) $(CXXFLAGS) -std=c++17 $^ -o $@
 
-.PHONY: all clean cleanobj cleantest
+.PHONY: all directory testdir clean cleantest
