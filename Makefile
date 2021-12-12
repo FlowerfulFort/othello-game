@@ -74,6 +74,6 @@ testobj/Position.o: $(TESTSRC)/Position.cpp
 	$(CXX) $(INC) -c $^ -o $@
 
 mktest: testobj/test.o testobj/gtest_main.a $(TESTOBJs)
-	g++ $(CPPFLAGS) $(CXXFLAGS) -std=c++17 $^ -o $@
+	g++ $(CPPFLAGS) $(CXXFLAGS) -std=c++17 $^ -o test
 
 .PHONY: all directory testdir clean cleantest
