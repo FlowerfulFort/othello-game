@@ -1,14 +1,26 @@
-# othello-game
-othello game
+# Othello-game
+Literally this project is othello game.
+
+## How to Play
+![캡처](https://user-images.githubusercontent.com/42996160/175473644-faf236fc-0999-469b-be16-a01f910424ac.PNG)
+
+Player1: Black
+
+Player2: White
+
+Orange is pointer to whose turn it is and where to drop piece.
+
+### Keyboard
+- F3: debug mode for key log.
+- Arrow key: Move orange pointer.
+- Enter: Drop the piece to orange pointer.
 
 ## Binary Dependencies
 ncurses-6.3
 
-## Build
-Ncurses 6.3의 라이브러리가 설치되어 있어야 한다.
-
-Ncurses가 설치만 되어 있다면
-make로 빌드할 수 있다.
-
-## 알려진 오류
-미구현을 제외하면 알려진 오류가 없음.
+## Build & Run
+You have to install Ncurses-6.3 library to build this game.
+```
+make
+./main
+```
